@@ -1,4 +1,4 @@
-"""(c) Copyright 2018. DataXu, Inc. All Rights Reserved."""
+"""(c) Copyright 2019. DataXu, Inc. All Rights Reserved."""
 import argparse
 import csv
 import re
@@ -125,7 +125,6 @@ def convert_xml_to_csv(input_file, output_file):
 
             # Write test data in CSV file
             csv_writer.writerow(test_case_info)
-
 
 def main():
     """

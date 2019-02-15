@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase internalid="107147" name="Check &quot;New Deal&quot; content">
+    <node_order><![CDATA[100]]></node_order>
+    <externalid><![CDATA[1]]></externalid>
+    <version><![CDATA[1]]></version>
+    <summary><![CDATA[]]></summary>
+    <preconditions><![CDATA[]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[2]]></importance>
+    <steps>
+        <step>
+            <step_number><![CDATA[1]]></step_number>
+            <actions><![CDATA[<p>
+	<span style="font-size:13px;color:#000000;font-weight:400;text-decoration:none;font-family:'Arial';font-style:normal;text-decoration-skip-ink:none;">Check &quot;Window Header</span>&quot; value</p>
+]]></actions>
+            <expectedresults><![CDATA[<p>
+	<span style="font-size:13px;color:#000000;font-weight:400;text-decoration:none;font-family:'Arial';font-style:normal;text-decoration-skip-ink:none;">New Deal</span></p>
+]]></expectedresults>
+            <execution_type><![CDATA[1]]></execution_type>
+        </step>
+
+        <step>
+            <step_number><![CDATA[2]]></step_number>
+            <actions><![CDATA[<p>
+	<span style="font-size:13px;color:#000000;font-weight:400;text-decoration:none;font-family:'Arial';font-style:normal;text-decoration-skip-ink:none;">Check Primary Button text</span></p>
+]]></actions>
+            <expectedresults><![CDATA[<p>
+	<span style="font-size:13px;color:#000000;font-weight:400;text-decoration:none;font-family:'Arial';font-style:normal;text-decoration-skip-ink:none;">Set Cost &amp; Schedule &gt;</span></p>
+]]></expectedresults>
+            <execution_type><![CDATA[1]]></execution_type>
+        </step>
+    </steps>
+</testcase>
