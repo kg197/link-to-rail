@@ -55,11 +55,15 @@ def get_test_steps(xml):
     """
     test_steps = []
     expected_results = []
+    number = ""
+    step = ""
 
     if xml.find('steps') is not None:
         for steps in xml.find('steps'):
-            number = strip_html(HTML_PARSER.unescape(steps.find('step_number').text).encode('utf-8'))
-            step = strip_html(HTML_PARSER.unescape(steps.find('actions').text).encode('utf-8'))
+            if steps.find('step_number').text is not None:
+                number = strip_html(HTML_PARSER.unescape(steps.find('step_number').text).encode('utf-8'))
+            if steps.find('actions').text is not None:
+                step = strip_html(HTML_PARSER.unescape(steps.find('actions').text).encode('utf-8'))
 
             test_steps.append(number.strip() + '. ' + step.strip() + "\n")
 
@@ -82,49 +86,45 @@ def convert_xml_to_csv(input_file, output_file):
     root = tree.getroot()
 
     # Open a blank file for writing
-    test_case_data = open(output_file, 'w')
+    with open(output_file, 'w') as test_case_data:
+        # create the csv writer object
+        csv_writer = csv.writer(test_case_data)
 
-    # create the csv writer object
-    csv_writer = csv.writer(test_case_data)
+        count = 0
+        for test_cases in root.iter('testcase'):
+            test_case_info = []
 
-    count = 0
-    for test_cases in root.iter('testcase'):
-        test_case_info = []
+            # Increment the counter after writing header data
+            if count == 0:
+                csv_writer.writerow(['Title', 'Preconditions', 'Steps', 'Expected Results'])
+                count += 1
 
-        # Increment the counter after writing header data
-        if count == 0:
-            csv_writer.writerow(['Tittle', 'Pre conditions', 'Steps', 'Expected Results'])
-            count = count + 1
+            # Get the test name
+            test_case_info.append(strip_html(HTML_PARSER.unescape(test_cases.get('name').encode('utf-8'))))
 
-        # Get the test name
-        test_case_info.append(strip_html(HTML_PARSER.unescape(test_cases.get('name').encode('utf-8'))))
+            # Get test name and pre conditions
+            test_case_info.append(re.sub('\t+', ' ', get_test_summary(test_cases)))
 
-        # Get test name and pre conditions
-        test_case_info.append(re.sub('\t+', ' ', get_test_summary(test_cases)))
+            # Get test steps and expected results
+            test_steps, expected_results = get_test_steps(test_cases)
 
-        # Get test steps and expected results
-        test_steps, expected_results = get_test_steps(test_cases)
+            # Aggregate all related test steps and expected results
+            if test_steps is not None and expected_results is not None:
+                format_step = ''
+                for each_step in test_steps:
+                    format_step = format_step + each_step
+                test_case_info.append(format_step)
 
-        # Aggregate all related test steps and expected results
-        if test_steps is not None and expected_results is not None:
-            format_step = ''
-            for each_step in test_steps:
-                format_step = format_step + each_step
-            test_case_info.append(format_step)
+                result = ''
+                for each_result in expected_results:
+                    result = result + each_result
+                test_case_info.append(result)
+            else:
+                test_case_info.append(' ')
+                test_case_info.append(' ')
 
-            result = ''
-            for each_result in expected_results:
-                result = result + each_result
-            test_case_info.append(result)
-        else:
-            test_case_info.append(' ')
-            test_case_info.append(' ')
-
-        # Write test data in CSV file
-        csv_writer.writerow(test_case_info)
-
-    # Close the CSV file upon completion
-    test_case_data.close()
+            # Write test data in CSV file
+            csv_writer.writerow(test_case_info)
 
 
 def main():
